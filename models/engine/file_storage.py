@@ -13,7 +13,7 @@ class FileStorage:
         obj_list = {}
         if cls:
             for key, value in FileStorage.__objects.items():
-                if cls.__name__ == key.split(".")[0]:
+                if cls == key.split(".")[0]:
                     obj_list[key] = value
             return obj_list
         else:
