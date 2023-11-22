@@ -64,3 +64,4 @@ class FileStorage:
                 if obj.id == key.split(".")[1]:
                     del FileStorage.__objects[key]
                     break
+            self.save()
