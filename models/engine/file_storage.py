@@ -56,6 +56,8 @@ class FileStorage:
         except FileNotFoundError:
             pass
 
+<<<<<<< HEAD
+=======
     def delete(self, obj=None):
         """Delete object from __objects if it exists"""
         if obj:
@@ -64,3 +66,4 @@ class FileStorage:
                 if obj.id == key.split(".")[1]:
                     del FileStorage.__objects[key]
                     break
+>>>>>>> 8ab9c67020720989a1cc5a4a76f2877f9a82c55c
