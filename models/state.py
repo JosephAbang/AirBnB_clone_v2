@@ -3,17 +3,19 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
-from models import storage as s
+from os import getenv
 
 class State(BaseModel, Base):
     """ State class """
     __tablename__ = 'states'
-    name = Column(String(128), nullable=False)
 
-    if s.__class__.__name__ == 'DBStorage':
-        cities = relationship("City", back_populates='state', cascade='delete, delete-orphan')
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
+        name = Column(String(128), nullable=False)
+        cities = relationship("City", backref='state', cascade='all, delete, delete-orphan')
 
-    elif s.__class__.__name__ == 'FileStorage':
+    else:
+        name = ''
+
         @property
         def cities(self):
             """Getter attribute that returns the list of City instances"""
