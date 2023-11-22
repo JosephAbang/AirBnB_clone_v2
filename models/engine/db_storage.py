@@ -2,8 +2,15 @@
 """Script defnes DataBAse storage class"""
 
 from sqlalchemy import create_engine, MetaData
+from sqlalchemy.orm import class_mapper
 from os import environ
-from models.base_model import Base
+from models.base_model import Base, BaseModel
+from models.user import User
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.review import Review
 
 class DBStorage:
     """database storage class"""
@@ -26,32 +33,32 @@ class DBStorage:
             metadata.drop_all(bind=self.__engine)
 
     def all(self, cls=None):
-        from sqlalchemy.orm import Session
-        from models.user import User
-        from models.state import State
-        from models.base_model import BaseModel
-        from models.city import City
-        from models.place import Place
-        from models.amenity import Amenity
-        from models.review import Review
-        from sqlalchemy.orm import class_mapper
+        '''
+            Query current database session
+        '''
+        db_dict = {}
+        classes = {"User": User, "BaseModel": BaseModel,
+           "Place": Place, "State": State,
+           "City": City, "Amenity": Amenity,
+           "Review": Review}
 
-
-        if not self.__session:
-            self.__session = Session(self.__engine)
         if cls:
-            all_objs = self.__session.query(cls).all()
+            objs = self.__session.query(classes[cls]).all()
+            for obj in objs:
+                key = "{}.{}".format(obj.__class__.__name__, obj.id)
+                db_dict[key] = obj
+            return db_dict
         else:
-            all_objs = []
-            model_list = [State, City]
-            for model in model_list:
-                all_objs.extend(self.__session.query(class_mapper(model)).all())
+            for k, v in classes.items():
+                if k not in ["BaseModel", "User", "Place", "Amenity", "Review"]:
+                    objs = self.__session.query(v).all()
 
-        obj_dict = {}
-        for obj in all_objs:
-            key = obj.__name__ + '.' + obj.id
-            obj_dict[key] = obj
-        return obj_dict
+                    if len(objs) > 0:
+                        for obj in objs:
+                            key = "{}.{}".format(obj.__class__.__name__,
+                                                 obj.id)
+                            db_dict[key] = obj
+            return db_dict
 
     def new(self, obj):
         """adds the object to the current database session"""
@@ -68,20 +75,9 @@ class DBStorage:
 
     def reload(self):
         """creates all tables in the database"""
-        from models.user import User
-        from models.state import State
-        from models.base_model import BaseModel
-        from models.city import City
-        from models.place import Place
-        from models.amenity import Amenity
-        from models.review import Review
         from sqlalchemy.orm import sessionmaker, scoped_session
 
-        Base.metadata.create_all(self.__engine)
-        Session = sessionmaker(bind=self.__engine, expire_on_commit=False)
-        self.__session = scoped_session(Session)
-
-
-
-
-        
+        self.__session = Base.metadata.create_all(self.__engine)
+        ssmaker = sessionmaker(bind=self.__engine, expire_on_commit=False)
+        Session = scoped_session(ssmaker)
+        self.__session = Session()
