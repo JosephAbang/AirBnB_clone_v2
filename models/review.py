@@ -8,7 +8,7 @@ from os import getenv
 
 class Review(BaseModel, Base):
     """ Review classto store review information """
-    _tablename__ = 'reviews'
+    __tablename__ = 'reviews'
 
     if getenv('HBNB_TYPE_STORAGE') == 'db':
         text = Column(String(1024), nullable=False)
