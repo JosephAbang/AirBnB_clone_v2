@@ -50,7 +50,7 @@ class DBStorage:
             return db_dict
         else:
             for k, v in classes.items():
-                if k not in ["BaseModel", "Amenity", "Review"]:
+                if k not in ["BaseModel", "Amenity"]:
                     objs = self.__session.query(v).all()
 
                     if len(objs) > 0:
