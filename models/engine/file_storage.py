@@ -59,9 +59,6 @@ class FileStorage:
     def delete(self, obj=None):
         """Delete object from __objects if it exists"""
         if obj:
-            key_list = FileStorage.__objects.keys()
-            for key in key_list:
-                if obj.id == key.split(".")[1]:
-                    del FileStorage.__objects[key]
-                    break
+            key = str(obj.__class__.__name__) + "." + str(obj.id)
+            FileStorage.__objects.pop(key, None)
             self.save()
