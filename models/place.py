@@ -20,5 +20,13 @@ class Place(BaseModel, Base):
         price_by_night = Column(Integer(), default=0, nullable=False)
         latitude = Column(Float(), nullable=True)
         longitude = Column(Float(), nullable=True)
+        reviews = relationship("Review", backref='place', cascade='all, delete, delete-orphan')
     else:
         amenity_ids = []
+        @property
+        def reviews(self):
+            """Getter attribute that returns the list of City instances"""
+            from models import storage
+            from models.review import Review
+            review_inst = storage.all(Review)
+            return [review for review in review_inst.values() if review.place_id == self.id]
