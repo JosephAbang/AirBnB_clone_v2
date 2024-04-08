@@ -2,23 +2,22 @@
 # Script sets up your web servers for the deployment of web_static
 
 # Install nginx
-sudo apt-get update
+sudo apt-get -y update
+sudo apt-get -y upgrade
 sudo apt-get -y install nginx
 
 # Create folders and file
-mkdir -p /data/
-mkdir -p /data/web_static/
 mkdir -p /data/web_static/releases/
 mkdir -p /data/web_static/shared/
 mkdir -p /data/web_static/releases/test/
 echo "Hello World!" > /data/web_static/releases/test/index.html
 
 # Create symbolic link
-ln -sf /data/web_static/releases/test/ /data/web_static/current
+sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 # Give ownership to user and group
-chown -R ubuntu/data/
-chgrp -R ubuntu/data/
+sudo chown -R ubuntu/data/
+sudo chgrp -R ubuntu/data/
 
 sudo bash -c 'echo "server {
     listen 80 default_server;
