@@ -19,25 +19,7 @@ sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 sudo chown -R ubuntu/data/
 sudo chgrp -R ubuntu/data/
 
-sudo bash -c 'echo "server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-    add_header X-Served-By $hostname;
-    root /var/www/html;
-    index index.html;
-    location /hbnb_static {
-        alias /data/web_static/current;
-        index index.html;
-    }
-    location /redirect_me {
-        return 301 http://www.google.com;
-    }
-    error_page 404 /404.html;
-    location /404 {
-        root /var/www/html;
-        internal;
-    }
-}" > /etc/nginx/sites-available/default'
-
+conf="\\\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}"
+sudo sed -i "45i $conf" /etc/nginx/sites-available/default
 
 sudo service nginx restart
