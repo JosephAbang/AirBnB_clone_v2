@@ -16,8 +16,8 @@ echo "Hello World!" > /data/web_static/releases/test/index.html
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
 # Give ownership to user and group
-sudo chown -R ubuntu/data/
-sudo chgrp -R ubuntu/data/
+sudo chown -R ubuntu /data/
+sudo chgrp -R ubuntu /data/
 
 conf="\\\n\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}"
 sudo sed -i "45i $conf" /etc/nginx/sites-available/default
