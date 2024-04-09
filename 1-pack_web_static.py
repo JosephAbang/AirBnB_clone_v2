@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """script generates a .tgz archive from the contents of the web_static folder"""
 
-from fabric.api import local, run
+from fabric.api import local
 from datetime import datetime
 
 def do_pack():
@@ -10,7 +10,7 @@ def do_pack():
     """
     try:
         local("mkdir -p versions")
-        date_now =  datetime.now()
+        date_now = datetime.now()
         archive_path = "versions/web_static_{}{}{}{}{}{}.tgz".format(
                 date_now.year,
                 date_now.month,
@@ -19,7 +19,7 @@ def do_pack():
                 date_now.minute,
                 date_now.second)
 
-        local("tar -cvzf {} web_static/)".format(archive_path))
+        local("tar -cvzf {} web_static/".format(archive_path))
         return archive_path
     except Exception:
         return None
