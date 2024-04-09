@@ -39,7 +39,7 @@ def do_deploy(archive_path):
         run("sudo mkdir -p {}".format(uncomp_fname))
         run("sudo tar -xzf /tmp/{} -C /data/web_static/releases/{}".format(
             archive_file, uncomp_fname))
-        run("sudo rm {}".format(archive_path))
+        run("sudo rm /tmp/{}".format(archive_file))
         run("sudo rm -rf /data/web_static/current")
         run('sudo mv {}/web_static/* {}/'.format(uncomp_fname, uncomp_fname))
         run('rm -rf {}/web_static'.format(uncomp_fname))
