@@ -9,7 +9,7 @@ def do_pack():
         Creates a tgz archive of the specified directory on the local machine.
     """
     try:
-        run("mkdir -p versions")
+        local("mkdir -p versions")
         date_now =  datetime.now()
         archive_path = "versions/web_static_{}{}{}{}{}{}.tgz".format(
                 date_now.year,
@@ -19,7 +19,7 @@ def do_pack():
                 date_now.minute,
                 date_now.second)
 
-        local("tar -csvf {} /web_static/)".format(archive_path))
+        local("tar -cvzf {} web_static/)".format(archive_path))
         return archive_path
     except Exception:
         return None
