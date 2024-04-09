@@ -33,16 +33,16 @@ def do_deploy(archive_path):
         Distribute archive to server
     """
     if os.path.exists(archive_path):
-        archive_file = archive_path.split('/')[-1][:-4]
-        uncomp_fname = "/data/web_static/releases/" + archive_file
+        archived_file = archive_path[9:]
+        newest_version = "/data/web_static/releases/" + archived_file[:-4]
+        archived_file = "/tmp/" + archived_file
         put(archive_path, "/tmp/")
-        run("sudo mkdir -p {}".format(uncomp_fname))
-        run("sudo tar -xzf /tmp/{} -C /data/web_static/releases/{}".format(
-            archive_file, uncomp_fname))
-        run("sudo rm /tmp/{}".format(archive_file))
+        run("sudo mkdir -p {}".format(newest_version))
+        run("sudo tar -xzf {} -C {}/".format(archived_file, newest_version))
+        run("sudo rm {}".format(archived_file))
+        run("sudo mv {}/web_static/* {}".format(newest_version,newest_version))
+        run("sudo rm -rf {}/web_static".format(newest_version))
         run("sudo rm -rf /data/web_static/current")
-        run('sudo mv {}/web_static/* {}/'.format(uncomp_fname, uncomp_fname))
-        run('rm -rf {}/web_static'.format(uncomp_fname))
-        run("sudo ln -sf {} /data/web_static/current".format(uncomp_fname))
+        run("sudo ln -s {} /data/web_static/current".format(newest_version))
         return True
     return False
