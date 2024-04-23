@@ -23,7 +23,7 @@ def hbnb():
 @app.route('/c/<text>')
 def c_text(text):
     """display text concatenation"""
-    return 'C' + text.replace('_',' ')
+    return 'C ' + text.replace('_',' ')
 
 
 if __name__ == '__main__':
