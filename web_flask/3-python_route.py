@@ -26,7 +26,7 @@ def c_text(text):
     return 'C ' + text.replace('_', ' ')
 
 
-@app.route('/python')
+@app.route('/python/')
 @app.route('/python/<text>')
 def py_text(text='is cool'):
     """Display string python with concatenated text"""
