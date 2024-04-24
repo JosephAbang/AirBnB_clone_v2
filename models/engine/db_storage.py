@@ -12,6 +12,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
+
 class DBStorage:
     """database storage class"""
     __engine = None
@@ -38,9 +39,9 @@ class DBStorage:
         '''
         db_dict = {}
         classes = {"User": User, "BaseModel": BaseModel,
-           "Place": Place, "State": State,
-           "City": City, "Amenity": Amenity,
-           "Review": Review}
+                    "Place": Place, "State": State,
+                    "City": City, "Amenity": Amenity,
+                    "Review": Review}
 
         if cls:
             objs = self.__session.query(classes[cls]).all()
@@ -81,3 +82,7 @@ class DBStorage:
         ssmaker = sessionmaker(bind=self.__engine, expire_on_commit=False)
         Session = scoped_session(ssmaker)
         self.__session = Session()
+
+    def close(self):
+        """Close private session attribute"""
+        self.__session.remove()
